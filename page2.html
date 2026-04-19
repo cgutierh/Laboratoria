@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitud de propuesta — IA Aplicada para equipos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#141210;
+  --paper:#fafaf8;
+  --terra:#b84a2a;
+  --terra-pale:#f5ede9;
+  --terra-dark:#8f3820;
+  --muted:#706d69;
+  --border:#e4e2dd;
+  --bg-field:#ffffff;
+  --success:#2d6a4f;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Instrument Sans',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:5vw 1.5rem 4rem;
+}
+
+/* GRAIN */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+.wrapper{width:100%;max-width:560px;position:relative;z-index:1}
+
+/* HEADER */
+.form-header{margin-bottom:3rem}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.55rem;
+  font-size:.68rem;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--terra);margin-bottom:1.25rem;
+}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--terra)}
+.form-header h1{
+  font-family:var(--serif);
+  font-size:clamp(2rem,5vw,2.9rem);
+  line-height:1.08;letter-spacing:-.02em;
+  font-weight:600;margin-bottom:.9rem;
+}
+.form-header h1 em{font-style:italic;font-weight:400;color:var(--terra)}
+.form-header p{
+  font-size:.92rem;color:var(--muted);
+  line-height:1.72;max-width:48ch;font-weight:400;
+}
+
+/* PROGRESS */
+.progress-bar{
+  display:flex;align-items:center;
+  margin-bottom:2.75rem;
+  border:1px solid var(--border);border-radius:3px;overflow:hidden;
+}
+.prog-step{
+  flex:1;padding:.45rem .5rem;
+  font-size:.62rem;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;text-align:center;
+  color:var(--muted);background:var(--paper);
+  border-right:1px solid var(--border);
+  transition:background .3s,color .3s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.prog-step:last-child{border-right:none}
+.prog-step.done{background:var(--terra-pale);color:var(--terra)}
+.prog-step.active{background:var(--terra);color:#fff}
+
+/* FORM CARD */
+.form-card{
+  background:#fff;border:1px solid var(--border);
+  border-radius:4px;padding:2.25rem 2.5rem;margin-bottom:1.25rem;
+}
+.step-panel{display:none}
+.step-panel.active{display:block;animation:fadeIn .3s ease both}
+
+/* FIELDS */
+.fgroup{margin-bottom:1.1rem}
+.fgroup label{
+  display:block;font-size:.68rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.45rem;
+}
+.fhelp{
+  font-size:.8rem;color:var(--muted);font-style:italic;
+  line-height:1.55;margin-bottom:.6rem;
+  padding-left:.85rem;border-left:2px solid var(--border);
+}
+input[type=text],input[type=email],select,textarea{
+  width:100%;padding:.72rem .95rem;
+  font-family:var(--sans);font-size:.92rem;
+  color:var(--ink);background:var(--bg-field);
+  border:1px solid var(--border);border-radius:2px;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--terra);
+  box-shadow:0 0 0 3px rgba(184,74,42,.08);
+}
+input::placeholder,textarea::placeholder{color:#c5c2bc}
+select{
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' fill='none'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23706d69' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .95rem center;
+}
+select option{color:var(--ink)}
+textarea{resize:vertical;min-height:96px;line-height:1.6}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+
+/* PILLS */
+.pill-group{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem}
+.pill{
+  display:flex;align-items:center;gap:.45rem;
+  padding:.48rem .9rem;border:1px solid var(--border);
+  border-radius:20px;font-size:.82rem;font-weight:500;
+  color:var(--muted);cursor:pointer;
+  transition:all .18s;background:#fff;user-select:none;
+}
+.pill input[type=radio]{display:none}
+.pill:hover{border-color:var(--terra);color:var(--terra)}
+.pill.selected{
+  background:var(--terra-pale);border-color:var(--terra);
+  color:var(--terra);font-weight:600;
+}
+.pill-dot{
+  width:7px;height:7px;border-radius:50%;
+  border:1.5px solid currentColor;flex-shrink:0;
+  transition:background .18s;
+}
+.pill.selected .pill-dot{background:var(--terra);border-color:var(--terra)}
+
+/* NAV */
+.form-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;margin-top:1.75rem;
+}
+.btn-back{
+  font-size:.8rem;font-weight:500;color:var(--muted);
+  background:none;border:none;cursor:pointer;
+  font-family:var(--sans);padding:.5rem 0;
+  transition:color .2s;
+}
+.btn-back:hover{color:var(--ink)}
+.btn-back:disabled{opacity:0;pointer-events:none}
+.btn-next{
+  padding:.78rem 1.75rem;background:var(--terra);color:#fff;
+  font-family:var(--sans);font-size:.85rem;font-weight:600;
+  letter-spacing:.03em;border:none;border-radius:2px;
+  cursor:pointer;transition:background .2s,transform .12s;
+}
+.btn-next:hover{background:var(--terra-dark);transform:translateY(-1px)}
+.btn-next:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none}
+.step-counter{font-size:.72rem;color:var(--muted);font-weight:500;letter-spacing:.04em}
+
+/* CONFIRMATION */
+.confirmation{display:none;text-align:center;padding:3rem 2rem;animation:fadeIn .4s ease both}
+.confirm-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--terra-pale);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.5rem;font-size:1.4rem;color:var(--terra);
+}
+.confirm-title{
+  font-family:var(--serif);font-size:2rem;
+  font-weight:600;letter-spacing:-.01em;margin-bottom:.75rem;
+}
+.confirm-sub{
+  font-size:.92rem;color:var(--muted);line-height:1.72;
+  max-width:38ch;margin:0 auto 2rem;
+}
+.confirm-details{
+  display:flex;flex-direction:column;gap:.65rem;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:1.5rem 0;margin-bottom:2rem;text-align:left;
+}
+.confirm-row{display:flex;align-items:baseline;gap:.75rem;font-size:.85rem}
+.confirm-key{
+  font-size:.66rem;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);min-width:110px;flex-shrink:0;
+}
+.confirm-val{color:var(--ink);font-weight:500}
+.confirm-promise{
+  font-family:var(--serif);font-size:1.05rem;
+  font-style:italic;color:var(--muted);line-height:1.6;
+}
+.confirm-promise strong{
+  font-style:normal;font-family:var(--sans);
+  font-size:.72rem;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--terra);
+  display:block;margin-top:.4rem;
+}
+
+/* TRUST FOOTER */
+.trust-footer{
+  display:flex;align-items:center;gap:.75rem;
+  font-size:.78rem;color:var(--muted);
+  padding:1rem 0;border-top:1px solid var(--border);
+}
+.trust-footer::before{
+  content:'✓';display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--terra-pale);color:var(--terra);
+  font-size:.6rem;font-weight:700;flex-shrink:0;
+}
+
+/* ANIM */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.wrapper>*{animation:fadeIn .5s ease both}
+.wrapper>*:nth-child(2){animation-delay:.08s}
+.wrapper>*:nth-child(3){animation-delay:.16s}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="form-header">
+    <div class="eyebrow">Solicitud de propuesta</div>
+    <h1>Cuéntame<br>sobre tu <em>equipo.</em></h1>
+    <p>Cinco preguntas. Menos de tres minutos. Te respondo en menos de 48 horas con una propuesta concreta adaptada a vuestro contexto.</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="prog-step active" id="prog-1">Contacto</div>
+    <div class="prog-step" id="prog-2">Equipo</div>
+    <div class="prog-step" id="prog-3">Nivel IA</div>
+    <div class="prog-step" id="prog-4">Objetivo</div>
+    <div class="prog-step" id="prog-5">Fechas</div>
+  </div>
+
+  <div class="form-card" id="form-card">
+
+    <!-- PASO 1: CONTACTO — nombre + email + empresa en un paso -->
+    <div class="step-panel active" id="step-1">
+      <div class="fgroup">
+        <label>Tu nombre</label>
+        <p class="fhelp">Solo tu nombre, como prefieras que te llame.</p>
+        <input type="text" id="f-nombre" placeholder="Tu nombre completo" oninput="validate()">
+      </div>
+      <div class="fgroup">
+        <label>Email profesional</label>
+        <p class="fhelp">Te escribiré aquí con la propuesta. Sin spam ni newsletters.</p>
+        <input type="email" id="f-email" placeholder="tu@empresa.com" oninput="validate()">
+      </div>
+      <div class="fgroup">
+        <label>Empresa u organización</label>
+        <p class="fhelp">Me ayuda a entender el contexto antes de la llamada.</p>
+        <input type="text" id="f-empresa" placeholder="Nombre de la empresa" oninput="validate()">
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" disabled>← Anterior</button>
+        <div style="display:flex;align-items:center;gap:1.25rem">
+          <span class="step-counter">1 de 5</span>
+          <button class="btn-next" id="btn-next-1" onclick="goTo(2)" disabled>Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2: EQUIPO — rol + tamaño separados -->
+    <div class="step-panel" id="step-2">
+      <div class="fgroup">
+        <label>Tu rol principal</label>
+        <p class="fhelp">Esto me ayuda a entender desde qué perspectiva te acercas a la IA.</p>
+        <select id="f-rol" onchange="validate()">
+          <option value="" disabled selected>Selecciona tu rol</option>
+          <option>Head of Design / Design Lead</option>
+          <option>Head of Product / CPO</option>
+          <option>Product Manager / Product Owner</option>
+          <option>UX Manager / UX Lead</option>
+          <option>Director/a de Innovación o Digital</option>
+          <option>Otro rol de liderazgo</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label>Tamaño del equipo</label>
+        <p class="fhelp">El número de personas que participarían en el workshop.</p>
+        <select id="f-tamano" onchange="validate()">
+          <option value="" disabled selected>Selecciona</option>
+          <option>2–5 personas</option>
+          <option>6–10 personas</option>
+          <option>11–20 personas</option>
+          <option>Más de 20 personas</option>
+        </select>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(1)">← Anterior</button>
+        <div style="display:flex;align-items:center;gap:1.25rem">
+          <span class="step-counter">2 de 5</span>
+          <button class="btn-next" id="btn-next-2" onclick="goTo(3)" disabled>Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3: NIVEL IA — sin cambios, era perfecto -->
+    <div class="step-panel" id="step-3">
+      <div class="fgroup">
+        <label>¿Cómo describirías el nivel actual de tu equipo con la IA?</label>
+        <p class="fhelp">Sin juicios. Saber dónde estáis ahora es lo más importante para diseñar un workshop que tenga sentido para vosotros.</p>
+        <div class="pill-group" id="nivel-group">
+          <label class="pill" onclick="selectPill(this,'nivel')">
+            <input type="radio" name="nivel" value="0">
+            <span class="pill-dot"></span>Apenas empezamos
+          </label>
+          <label class="pill" onclick="selectPill(this,'nivel')">
+            <input type="radio" name="nivel" value="1">
+            <span class="pill-dot"></span>Uso individual, sin metodología
+          </label>
+          <label class="pill" onclick="selectPill(this,'nivel')">
+            <input type="radio" name="nivel" value="2">
+            <span class="pill-dot"></span>Tenemos herramientas, sin integración real
+          </label>
+          <label class="pill" onclick="selectPill(this,'nivel')">
+            <input type="radio" name="nivel" value="3">
+            <span class="pill-dot"></span>Ya tenemos práctica, queremos ir más lejos
+          </label>
+        </div>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(2)">← Anterior</button>
+        <div style="display:flex;align-items:center;gap:1.25rem">
+          <span class="step-counter">3 de 5</span>
+          <button class="btn-next" id="btn-next-3" onclick="goTo(4)" disabled>Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4: OBJETIVO — con texto de ayuda mejorado y ejemplo -->
+    <div class="step-panel" id="step-4">
+      <div class="fgroup">
+        <label>¿Qué quieres que cambie en tu equipo después del workshop?</label>
+        <p class="fhelp">Cuéntamelo como lo explicarías a un colega — cuanto más concreto, mejor puedo ayudarte. Ej: "Queremos que el equipo de diseño use IA en el proceso de research. Ahora cada persona hace lo que puede, sin criterio compartido."</p>
+        <textarea id="f-objetivo" placeholder="Describe la situación actual y qué quieres conseguir..." oninput="validate()" rows="5"></textarea>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(3)">← Anterior</button>
+        <div style="display:flex;align-items:center;gap:1.25rem">
+          <span class="step-counter">4 de 5</span>
+          <button class="btn-next" id="btn-next-4" onclick="goTo(5)" disabled>Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 5: FECHAS — franjas concretas en lugar de alta/media/baja -->
+    <div class="step-panel" id="step-5">
+      <div class="fgroup">
+        <label>¿Tenéis alguna franja de fechas en mente?</label>
+        <p class="fhelp">Es orientativo. Si todavía no lo tenéis claro, no importa — cuéntame si hay alguna fecha límite o evento que condicione el timing.</p>
+        <input type="text" id="f-fechas" placeholder="Ej: Segunda quincena de mayo, o flexible en junio...">
+      </div>
+      <div class="fgroup">
+        <label>¿Con qué urgencia lo necesitáis?</label>
+        <p class="fhelp">Me ayuda a priorizar y responderte en el orden adecuado.</p>
+        <select id="f-urgencia">
+          <option value="" disabled selected>Selecciona</option>
+          <option>Antes de un mes — es urgente</option>
+          <option>En los próximos 2–3 meses</option>
+          <option>Estamos explorando, sin fecha concreta</option>
+        </select>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(4)">← Anterior</button>
+        <div style="display:flex;align-items:center;gap:1.25rem">
+          <span class="step-counter">5 de 5</span>
+          <button class="btn-next" onclick="submit()">Enviar solicitud ✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRMACIÓN -->
+    <div class="confirmation" id="confirmation">
+      <div class="confirm-icon">✓</div>
+      <div class="confirm-title">Solicitud recibida.</div>
+      <p class="confirm-sub">Gracias por tomarte el tiempo. Aquí tienes un resumen de lo que me has contado.</p>
+      <div class="confirm-details" id="confirm-details"></div>
+      <p class="confirm-promise">
+        Te respondo en menos de 48 horas con una propuesta concreta adaptada a tu equipo. Sin plantillas genéricas.
+        <strong>Docente · Diseñadora UX · IA aplicada desde 2017</strong>
+      </p>
+    </div>
+
+  </div>
+
+  <p class="trust-footer">
+    Sin spam ni newsletters. Tu información solo se usa para preparar la propuesta.
+  </p>
+
+</div>
+
+<script>
+let current = 1;
+
+function goTo(n) {
+  document.getElementById('step-' + current).classList.remove('active');
+  document.getElementById('prog-' + current).classList.remove('active');
+  document.getElementById('prog-' + current).classList.add('done');
+  current = n;
+  document.getElementById('step-' + current).classList.add('active');
+  document.getElementById('prog-' + current).classList.remove('done');
+  document.getElementById('prog-' + current).classList.add('active');
+  validate();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function selectPill(el, group) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  validate();
+}
+
+function validate() {
+  if (current === 1) {
+    const n = document.getElementById('f-nombre').value.trim();
+    const e = document.getElementById('f-email').value.trim();
+    const emp = document.getElementById('f-empresa').value.trim();
+    const ok = n.length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && emp.length > 1;
+    document.getElementById('btn-next-1').disabled = !ok;
+  }
+  if (current === 2) {
+    const r = document.getElementById('f-rol').value;
+    const t = document.getElementById('f-tamano').value;
+    document.getElementById('btn-next-2').disabled = !(r && t);
+  }
+  if (current === 3) {
+    const sel = document.querySelector('input[name="nivel"]:checked');
+    document.getElementById('btn-next-3').disabled = !sel;
+  }
+  if (current === 4) {
+    const o = document.getElementById('f-objetivo').value.trim();
+    document.getElementById('btn-next-4').disabled = o.length < 10;
+  }
+}
+
+function submit() {
+  const nivelMap = ['Apenas empezamos','Uso individual, sin metodología','Tenemos herramientas, sin integración real','Ya tenemos práctica, queremos ir más lejos'];
+  const nivel = document.querySelector('input[name="nivel"]:checked');
+
+  const rows = [
+    ['Nombre',   document.getElementById('f-nombre').value.trim()],
+    ['Email',    document.getElementById('f-email').value.trim()],
+    ['Empresa',  document.getElementById('f-empresa').value.trim()],
+    ['Rol',      document.getElementById('f-rol').value],
+    ['Equipo',   document.getElementById('f-tamano').value],
+    ['Nivel IA', nivel ? nivelMap[nivel.value] : '—'],
+    ['Objetivo', document.getElementById('f-objetivo').value.trim()],
+    ['Fechas',   document.getElementById('f-fechas').value.trim() || 'Sin indicar'],
+    ['Urgencia', document.getElementById('f-urgencia').value || 'Sin indicar'],
+  ];
+
+  document.getElementById('confirm-details').innerHTML = rows.map(([k,v]) =>
+    `<div class="confirm-row"><span class="confirm-key">${k}</span><span class="confirm-val">${v}</span></div>`
+  ).join('');
+
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.prog-step').forEach(p => { p.classList.remove('active'); p.classList.add('done'); });
+  document.getElementById('confirmation').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+validate();
+</script>
+</body>
+</html>
