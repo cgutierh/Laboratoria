@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA que funciona para tu equipo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#141210;
+  --paper:#fafaf8;
+  --terra:#b84a2a;
+  --terra-pale:#f5ede9;
+  --muted:#706d69;
+  --border:#e4e2dd;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Instrument Sans',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+/* ── LAYOUT ── */
+main{
+  flex:1;
+  max-width:720px;
+  margin:0 auto;
+  padding:7vw 2rem 5rem;
+  position:relative;z-index:1;
+  width:100%;
+}
+
+/* ── EYEBROW ── */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--terra);margin-bottom:2.5rem;
+}
+.eyebrow::before{
+  content:'';display:inline-block;
+  width:24px;height:1px;background:var(--terra);
+}
+
+/* ── HEADLINE ── */
+h1{
+  font-family:var(--serif);
+  font-size:clamp(2.8rem,7vw,5.2rem);
+  line-height:1.04;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  margin-bottom:2rem;
+  font-weight:600;
+}
+h1 em{
+  font-style:italic;
+  font-weight:400;
+  color:var(--terra);
+}
+
+/* ── HIGHLIGHT LINE ── */
+.highlight-line{
+  font-family:var(--serif);
+  font-size:clamp(1.1rem,2.5vw,1.4rem);
+  font-style:italic;
+  color:var(--terra);
+  margin-bottom:1.25rem;
+  letter-spacing:-.01em;
+  line-height:1.3;
+}
+
+/* ── SUBTITLE ── */
+.subtitle{
+  font-size:clamp(1rem,2vw,1.15rem);
+  color:var(--muted);
+  line-height:1.75;
+  max-width:52ch;
+  margin-bottom:3.5rem;
+  font-weight:400;
+  border-left:2px solid var(--border);
+  padding-left:1.25rem;
+}
+
+/* ── DIVIDER ── */
+.rule{
+  width:40px;height:1px;
+  background:var(--terra);
+  margin-bottom:2.5rem;
+}
+
+/* ── BENEFITS ── */
+.benefits{
+  display:flex;flex-direction:column;gap:0;
+  margin-bottom:4rem;
+  border-top:1px solid var(--border);
+}
+.benefit{
+  display:grid;
+  grid-template-columns:2rem 1fr;
+  gap:1.25rem;
+  padding:1.75rem 0;
+  border-bottom:1px solid var(--border);
+  align-items:start;
+  transition:background .2s;
+}
+.benefit:hover{
+  background:var(--terra-pale);
+  margin:0 -2rem;
+  padding:1.75rem 2rem;
+  border-radius:3px;
+}
+.benefit-num{
+  font-family:var(--serif);
+  font-size:1.1rem;
+  color:var(--terra);
+  font-weight:600;
+  padding-top:.15rem;
+  line-height:1;
+}
+.benefit-body{}
+.benefit-title{
+  font-size:.88rem;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:.4rem;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+.benefit-text{
+  font-size:.95rem;
+  color:var(--muted);
+  line-height:1.7;
+  font-weight:400;
+}
+
+/* ── CTA BLOCK ── */
+.cta-block{
+  background:var(--ink);
+  border-radius:4px;
+  padding:2.5rem 2.75rem;
+  margin-bottom:2.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:2rem;
+  flex-wrap:wrap;
+}
+.cta-copy{}
+.cta-title{
+  font-family:var(--serif);
+  font-size:1.6rem;
+  color:var(--paper);
+  line-height:1.2;
+  margin-bottom:.35rem;
+  letter-spacing:-.01em;
+}
+.cta-sub{
+  font-size:.82rem;
+  color:#8a877f;
+  font-weight:400;
+}
+.cta-btn{
+  display:inline-block;
+  background:var(--terra);
+  color:#fff;
+  text-decoration:none;
+  padding:.85rem 2rem;
+  font-size:.85rem;
+  font-weight:600;
+  letter-spacing:.04em;
+  border-radius:2px;
+  white-space:nowrap;
+  border:none;cursor:pointer;
+  transition:background .2s,transform .15s;
+  font-family:var(--sans);
+}
+.cta-btn:hover{background:#9a3d22;transform:translateY(-1px)}
+
+/* ── TRUST LINE ── */
+.trust{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1.5rem 1.75rem;
+  border:1px solid var(--border);
+  border-radius:3px;
+  background:#fff;
+}
+.trust-icon{
+  font-family:var(--serif);
+  font-size:2rem;
+  color:var(--terra);
+  line-height:1;
+  flex-shrink:0;
+  margin-top:.1rem;
+  font-style:italic;
+}
+.trust-text{
+  font-family:var(--serif);
+  font-size:1.05rem;
+  font-style:italic;
+  color:var(--muted);
+  line-height:1.6;
+}
+.trust-text strong{
+  font-style:normal;
+  font-weight:600;
+  color:var(--ink);
+  display:block;
+  font-family:var(--sans);
+  font-size:.75rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-top:.5rem;
+}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;
+  padding:2rem;
+  font-size:.72rem;
+  color:var(--border);
+  position:relative;z-index:1;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.eyebrow{animation:fadeUp .6s ease both}
+h1{animation:fadeUp .7s ease both .08s}
+.highlight-line{animation:fadeUp .7s ease both .13s}
+.subtitle{animation:fadeUp .7s ease both .18s}
+.rule{animation:fadeUp .6s ease both .24s}
+.benefits{animation:fadeUp .7s ease both .30s}
+.cta-block{animation:fadeUp .7s ease both .38s}
+.trust{animation:fadeUp .7s ease both .46s}
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- EYEBROW: más específico -->
+  <div class="eyebrow">Para líderes de diseño y producto</div>
+
+  <!-- TITULAR: pequeño ajuste para más contundencia -->
+  <h1>Tu equipo tiene IA.<br>Nadie sabe <em>usarla bien.</em></h1>
+
+  <!-- HIGHLIGHT: la mejor frase, ahora con protagonismo -->
+  <p class="highlight-line">Trabajo que cambia el lunes siguiente.</p>
+
+  <!-- SUBTÍTULO: limpiado, sin la frase que se movió arriba -->
+  <p class="subtitle">
+    Ayudo a líderes de producto y diseño a convertir la inteligencia artificial en una competencia real de equipo — con metodología, práctica aplicada y un mes de seguimiento incluido. Sin demos. Sin teoría suelta.
+  </p>
+
+  <div class="rule"></div>
+
+  <div class="benefits">
+
+    <!-- BENEFICIO 01: reescrito para ser más concreto y visual -->
+    <div class="benefit">
+      <div class="benefit-num">01</div>
+      <div class="benefit-body">
+        <div class="benefit-title">De cada uno por su cuenta a una forma de trabajar compartida</div>
+        <p class="benefit-text">El equipo sale de la sesión con un criterio común sobre cuándo y cómo usar la IA — no cada persona haciendo lo que puede. Un lenguaje compartido y flujos concretos desde el primer día.</p>
+      </div>
+    </div>
+
+    <!-- BENEFICIO 02: cierre reforzado -->
+    <div class="benefit">
+      <div class="benefit-num">02</div>
+      <div class="benefit-body">
+        <div class="benefit-title">Formación anclada en vuestros proyectos reales</div>
+        <p class="benefit-text">No hay ejercicios inventados ni casos genéricos. Trabajamos con los retos concretos que tu equipo tiene encima de la mesa. Al terminar la sesión, cada persona ha hecho algo real — no tomado apuntes.</p>
+      </div>
+    </div>
+
+    <!-- BENEFICIO 03: título más concreto y tangible -->
+    <div class="benefit">
+      <div class="benefit-num">03</div>
+      <div class="benefit-body">
+        <div class="benefit-title">Un mes de acompañamiento incluido</div>
+        <p class="benefit-text">Después del workshop, el aprendizaje no se abandona. Incluye canal asíncrono de preguntas durante cuatro semanas y una sesión de revisión para ver qué ha cambiado y qué viene después.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA: afirmación en lugar de pregunta, descripción más específica -->
+  <div class="cta-block">
+    <div class="cta-copy">
+      <div class="cta-title">Hablemos de tu equipo.</div>
+      <div class="cta-sub">Primera llamada de 30 min · Propuesta personalizada en 48 h · Sin compromiso</div>
+    </div>
+    <button class="cta-btn" onclick="this.textContent='✓ En breve te contacto'">Solicitar propuesta →</button>
+  </div>
+
+  <!-- TRUST: reescrita en positivo, con nombre -->
+  <div class="trust">
+    <div class="trust-icon">"</div>
+    <div class="trust-text">
+      Más de 20 años formando profesionales. 7 años gestionando productos reales de IA. Enseño desde la práctica, no desde la teoría.
+      <strong>— Nombre Apellido · Docente · Diseñadora UX · Especialista en IA aplicada</strong>
+    </div>
+  </div>
+
+</main>
+
+<footer>Prototipo conceptual · 2025</footer>
+
+</body>
+</html>
